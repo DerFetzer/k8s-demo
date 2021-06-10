@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: mariadb
+
+spec:
+  ports:
+    - protocol: TCP
+      name: sql
+      port: 3306
+  selector:
+    app: mariadb
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: mariadb
+  labels:
+    app: mariadb
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:10.6.1
+          env:
+            - name: MARIADB_RANDOM_ROOT_PASSWORD
+              value: "yes"
+            - name: MARIADB_USER
+              value: wordpress
+            - name: MARIADB_PASSWORD
+              value: wordpress_password
+            - name: MARIADB_DATABASE
+              value: wordpress
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: data
+          ports:
+            - name: sql
+              containerPort: 3306
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: mariadb-pvc

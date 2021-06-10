@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: default
+  name: ingress-wordpress
+spec:
+  rules:
+  - host: wordpress.192.168.99.102.nip.io # TODO: Node IP setzen --> "kubectl get nodes -o wide"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: http
+            port: 
+              number: 80
