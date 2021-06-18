@@ -1,3 +1,10 @@
+## Kubernetes
+> **Kubernetes (K8s)** ist ein **Open-Source-System** zur **Automatisierung** der **Bereitstellung**, **Skalierung** und **Verwaltung** von **containerisierten Anwendungen.**
+
+(Quelle: https://kubernetes.io/de/)
+
+Überblick der **Funktionsweise**: https://sensu.io/blog/how-kubernetes-works
+
 ## Informationen zum Cluster
 ```
 kubectl version
